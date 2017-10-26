@@ -2,21 +2,23 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 
 
-
-
 class SalaryRow extends React.Component {
+   constructor(props) {
+      super(props);
+      this.state = {value: '0'};
+      this.updateValue = this.updateValue.bind(this);
+      this.saveChanges = this.saveChanges.bind(this);
+   }
 
+   updateValue(modifiedValue){
+      this.setState({
+         value:modifiedValue
+      })
+   }
 
-
-  constructor() {
-    super();
-    this.state = {value: ''};
-    this.salaryChange = this.salaryChange.bind(this);
-  }
-
- salaryChange(event) {
-    this.setState({value: event.target.value});
-  }
+saveChanges() {
+    this.setState({employees: this.state.employees.salary.concat(this.state.value)})
+}
 
   render() {
     
@@ -25,16 +27,31 @@ class SalaryRow extends React.Component {
         <td>{this.props.addEmployee.id}</td>
         <td>{this.props.addEmployee.name}</td>
         <td>{this.props.addEmployee.dep}</td>
-        <td><input type="number" onChange={this.salaryChange} /></td>
+        <td><InputSalary key={this.props.addEmployee.id} value={this.state.value} updateValue={this.updateValue} onChange={this.saveChanges} /></td>
         <td>{this.state.value*0.13}</td>
       </tr>
     );
   }
-}
+};
+
+class InputSalary extends React.Component {
+   update() {
+      var modifiedValue = this.refs.inputValue.value;
+      this.props.updateValue(modifiedValue);
+   }
+
+   render() {
+      return (
+         <input type="number" ref="inputValue" value={this.props.value} onChange={this.update.bind(this)} />
+      );
+   }
+
+};
 
 class SalaryTable extends React.Component {
   render() {
     var rows = [];
+    var total = employees.reduce((prev, next) => prev + next.salary, 0);
     this.props.employee.forEach(function(addEmployee) {
       rows.push(<SalaryRow addEmployee={addEmployee} key={addEmployee.id} />);
     });
@@ -50,10 +67,10 @@ class SalaryTable extends React.Component {
           </tr>
         </thead>
         <tbody>
-        	{rows}
-        	<tr>
-        		<td colspan="5">Total:</td>
-        	</tr>
+          {rows}
+          <tr>
+            <td colspan="5">Total: {total}</td>
+          </tr>
         </tbody>
       </table>
     );
