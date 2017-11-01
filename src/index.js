@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import update from 'immutability-helper';
 
 
 class SalaryRow extends React.Component {
@@ -35,10 +36,19 @@ constructor() {
       };
    }
 
-   updateEmployeeData(employeeID, newEmployeeData) {
-    employeeID = this.state.employees.id;
+   updateEmployeeData(id, salary) {
+    var employees = this.state.employees;
+    var index = employees.findIndex(function(c) {
+      return c.id == id;
+    });
+
+    var updatedData = update(employees[index], {salary: {$set: salary}});
+
+    var newEmployees = update(employees, {
+      $splice: [[index, 1, updatedData]]
+    });
     this.setState({
-      employees: [...this.state.employees[employeeID].salary, newEmployeeData] 
+      employees: newEmployees 
     });
    }
 
