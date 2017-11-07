@@ -12,7 +12,7 @@ class SalaryRow extends React.Component {
         <td>{this.props.addEmployee.id}</td>
         <td>{this.props.addEmployee.name}</td>
         <td>{this.props.addEmployee.dep}</td>
-        <td><input onChange={this.props.action} /></td>
+        <td><input onChange={function(e) { this.props.action(this.props.addEmployee.id, e.target.value);}} /></td>
         <td>{this.props.addEmployee.dep}</td>
       </tr>
     );
