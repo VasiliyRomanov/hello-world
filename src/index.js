@@ -6,14 +6,18 @@ import update from 'immutability-helper';
 class SalaryRow extends React.Component {
 
   render() {
+
+    var actionHandler = this.props.action;
+    var employeeID = this.props.addEmployee.id;
+    var changeHandler = function (e) { actionHandler(employeeID, e.target.value);};
     
     return (
       <tr>
         <td>{this.props.addEmployee.id}</td>
         <td>{this.props.addEmployee.name}</td>
         <td>{this.props.addEmployee.dep}</td>
-        <td><input onChange={function(e) { this.props.action(this.props.addEmployee.id, e.target.value);}} /></td>
-        <td>{this.props.addEmployee.dep}</td>
+        <td><input onChange={changeHandler} /></td>
+        <td>{this.props.addEmployee.ndfl}</td>
       </tr>
     );
   }
@@ -42,7 +46,7 @@ constructor() {
       return c.id == id;
     });
 
-    var updatedData = update(employees[index], {salary: {$set: salary}});
+    var updatedData = update(employees[index], {salary: {$set: salary}, ndfl: {$set: salary*0.13}});
 
     var newEmployees = update(employees, {
       $splice: [[index, 1, updatedData]]
