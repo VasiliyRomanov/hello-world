@@ -1,5 +1,28 @@
-body {
-  margin: 0;
-  padding: 0;
-  font-family: sans-serif;
+
+table {
+  width: auto;
+  border-bottom: 0;
+  border-collapse: collapse;
+}
+
+td, th {
+	padding: 4px 20px;
+}
+
+tbody tr.hover:hover {
+	background: #afd792;
+	color: #fff;
+}
+
+.id {
+	width: 50px;
+}
+
+.right {
+	border: 0;
+}
+
+.bottom {
+	text-align: left;
+	border: 0;
 }
