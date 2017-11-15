@@ -1,6 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import update from 'immutability-helper';
+import { Button } from 'react-bootstrap';
+import './index.css';
 
 
 class SalaryRow extends React.Component {
@@ -20,26 +22,34 @@ class SalaryRow extends React.Component {
     var depHandler = this.props.dep;
     var changeDep = function (d) { depHandler(employeeID, d.target.value);};
 
-    var deleteData = this.props.del;
-    var delHandler = function() {deleteData(employeeID);};
+    var idEditor = this.props.delID;
+    var deleteID = function() {idEditor(employeeID);};
+
+    var nameEditor = this.props.delName;
+    var deleteName = function() {nameEditor(employeeID)}
+
+    var depEditor = this.props.delDep;
+    var deleteDep = function() {depEditor(employeeID)}
+
+    var salaryEditor = this.props.delSalary;
+    var deleteSalary = function() {salaryEditor(employeeID)}
 
     var fireEmployee = this.props.fire;
     var fireHandler = function() {fireEmployee(employeeID);};
 
-    var isID = this.props.addEmployee.id === '' ? <input type="text" onBlur={changeID} /> : this.props.addEmployee.id;
+    var isID = this.props.addEmployee.id === '' ? <input type="text" size="3" onBlur={changeID} /> : this.props.addEmployee.id;
     var isName = this.props.addEmployee.name === '' ? <input type="text" onBlur={changeName} /> : this.props.addEmployee.name;
     var isDep = this.props.addEmployee.dep === '' ? <input type="text" onBlur={changeDep} /> : this.props.addEmployee.dep;
     var isSalary = this.props.addEmployee.salary === '' ? <input type="number" onBlur={changeSalary} /> : this.props.addEmployee.salary;
     
     return (
-      <tr>
-        <td>{isID}</td>
-        <td>{isName}</td>
-        <td>{isDep}</td>
-        <td>{isSalary}</td>
+      <tr className="hover">
+        <td className="id">{isID}<input align="right" width="20px" type="image" onClick={deleteID} src="http://aux.iconpedia.net/uploads/264210985477521004.png" /></td>
+        <td>{isName}<input align="right" width="20px" type="image" onClick={deleteName} src="http://aux.iconpedia.net/uploads/264210985477521004.png" /></td>
+        <td>{isDep}<input align="right" width="20px" type="image" onClick={deleteDep} src="http://aux.iconpedia.net/uploads/264210985477521004.png" /></td>
+        <td>{isSalary}<input align="right" width="20px" type="image" onClick={deleteSalary} src="http://aux.iconpedia.net/uploads/264210985477521004.png" /></td>
         <td>{this.props.addEmployee.ndfl}</td>
-        <td><button onClick={delHandler} /></td>
-        <td><button onClick={fireHandler}>Удалить</button></td>
+        <td className="right"><input type="image" onClick={fireHandler} src="http://aux.iconpedia.net/uploads/14037210881909376695.png" /></td>
       </tr>
     );
   }
@@ -55,7 +65,10 @@ constructor() {
       this.updateDep = this.updateDep.bind(this);
       this.updateSalary = this.updateSalary.bind(this);
       this.addNewRow = this.addNewRow.bind(this);
-      this.deleteEmployeeData = this.deleteEmployeeData.bind(this);
+      this.deleteID = this.deleteID.bind(this);
+      this.deleteName = this.deleteName.bind(this);
+      this.deleteDep = this.deleteDep.bind(this);
+      this.deleteSalary = this.deleteSalary.bind(this);
       this.fireEmployee = this.fireEmployee.bind(this);
 
       this.state = {
@@ -140,22 +153,77 @@ constructor() {
     });
    }
 
-   deleteEmployeeData(id) {
+   deleteID(id) {
     var employees = this.state.employees;
     var index = employees.findIndex(function(c) {
       return c.id === id;
     });
 
-    var deleteData = update(employees[index], {id: {$set: ''}, name: {$set: ''}, dep: {$set: ''}, salary: {$set: ''}, ndfl: {$set: ''}});
+    var deletedID = update(employees[index], {id: {$set: ''}});
 
-    var deleteInfo = update(employees, {
-      $splice: [[index, 1, deleteData]]
+    var updateEmployees = update(employees, {
+      $splice: [[index, 1, deletedID]]
     });
 
     this.setState({
-      employees: deleteInfo 
+      employees: updateEmployees 
     });
    }
+
+   deleteName(id) {
+    var employees = this.state.employees;
+    var index = employees.findIndex(function(c) {
+      return c.id === id;
+    });
+
+    var deletedName = update(employees[index], {name: {$set: ''}});
+
+    var updateEmployees = update(employees, {
+      $splice: [[index, 1, deletedName]]
+    });
+
+      this.setState({
+        employees: updateEmployees 
+
+    });
+   }
+
+   deleteDep(id) {
+    var employees = this.state.employees;
+    var index = employees.findIndex(function(c) {
+      return c.id === id;
+    });
+
+    var deletedDep = update(employees[index], {dep: {$set: ''}});
+
+    var updateEmployees = update(employees, {
+      $splice: [[index, 1, deletedDep]]
+    });
+
+      this.setState({
+        employees: updateEmployees 
+
+    });
+   }
+
+   deleteSalary(id) {
+    var employees = this.state.employees;
+    var index = employees.findIndex(function(c) {
+      return c.id === id;
+    });
+
+    var deletedSalary = update(employees[index], {salary: {$set: ''}});
+
+    var updateEmployees = update(employees, {
+      $splice: [[index, 1, deletedSalary]]
+    });
+
+      this.setState({
+        employees: updateEmployees 
+
+    });
+   }
+ 
 
 
    fireEmployee(id) {
@@ -174,6 +242,7 @@ constructor() {
    }
 
   render() {
+    var total = this.state.employees.reduce((prev, next) => prev + next.ndfl,0);
     return (
       <table>
         <thead>
@@ -183,12 +252,14 @@ constructor() {
       <th>Отдел</th>
       <th>З/П</th>
       <th>НДФЛ</th>
+      <th></th>
           </tr>
         </thead>
         <tbody>
             {this.state.employees.map((dynamicComponent) => <SalaryRow 
-            key = {this.state.employees.id} addEmployee = {dynamicComponent} salary={this.updateSalary} id={this.updateID} name={this.updateName} dep={this.updateDep} del={this.deleteEmployeeData} fire={this.fireEmployee} />)}
-            <tr><td><button onClick={this.addNewRow}>Добавить</button></td></tr>
+            key = {this.state.employees.id} addEmployee = {dynamicComponent} salary={this.updateSalary} id={this.updateID} name={this.updateName} dep={this.updateDep} delID={this.deleteID} delName={this.deleteName} delDep={this.deleteDep} delSalary={this.deleteSalary} fire={this.fireEmployee} />)}
+            <tr><td colspan="6" className="bottom">Сумма НДФЛ: {total}</td></tr>
+            <tr><td colspan="6" className="bottom"><Button bsStyle="success" onClick={this.addNewRow}>Добавить</Button></td></tr>
         </tbody>
       </table>
     );
