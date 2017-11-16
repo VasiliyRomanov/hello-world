@@ -5,6 +5,14 @@ table {
   border-collapse: collapse;
 }
 
+th {
+	font-family: "Arial Black";
+}
+
+td {
+	font-family: "Tahoma"
+}
+
 td, th {
 	padding: 4px 20px;
 }
@@ -15,7 +23,7 @@ tbody tr.hover:hover {
 }
 
 .id {
-	width: 50px;
+	width: 65px;
 }
 
 .right {
@@ -25,4 +33,10 @@ tbody tr.hover:hover {
 .bottom {
 	text-align: left;
 	border: 0;
+	font-family: "Tahoma";
+	font-style: italic;
+}
+
+.add {
+	float: right;
 }
