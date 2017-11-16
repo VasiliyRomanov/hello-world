@@ -1,7 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import update from 'immutability-helper';
-import { Button } from 'react-bootstrap';
 import './index.css';
 
 
@@ -37,19 +36,19 @@ class SalaryRow extends React.Component {
     var fireEmployee = this.props.fire;
     var fireHandler = function() {fireEmployee(employeeID);};
 
-    var isID = this.props.addEmployee.id === '' ? <input type="text" size="3" onBlur={changeID} /> : this.props.addEmployee.id;
+    var isID = this.props.addEmployee.id === '' ? <input type="text" size="1" onBlur={changeID} /> : this.props.addEmployee.id;
     var isName = this.props.addEmployee.name === '' ? <input type="text" onBlur={changeName} /> : this.props.addEmployee.name;
     var isDep = this.props.addEmployee.dep === '' ? <input type="text" onBlur={changeDep} /> : this.props.addEmployee.dep;
     var isSalary = this.props.addEmployee.salary === '' ? <input type="number" onBlur={changeSalary} /> : this.props.addEmployee.salary;
     
     return (
       <tr className="hover">
-        <td className="id">{isID}<input align="right" width="20px" type="image" onClick={deleteID} src="http://aux.iconpedia.net/uploads/264210985477521004.png" /></td>
-        <td>{isName}<input align="right" width="20px" type="image" onClick={deleteName} src="http://aux.iconpedia.net/uploads/264210985477521004.png" /></td>
-        <td>{isDep}<input align="right" width="20px" type="image" onClick={deleteDep} src="http://aux.iconpedia.net/uploads/264210985477521004.png" /></td>
-        <td>{isSalary}<input align="right" width="20px" type="image" onClick={deleteSalary} src="http://aux.iconpedia.net/uploads/264210985477521004.png" /></td>
+        <td className="id">{isID}<input title="Редактировать" align="right" width="20px" type="image" onClick={deleteID} src="http://aux.iconpedia.net/uploads/264210985477521004.png" alt="" /></td>
+        <td>{isName}<input title="Редактировать" align="right" width="20px" type="image" onClick={deleteName} src="http://aux.iconpedia.net/uploads/264210985477521004.png" alt="" /></td>
+        <td>{isDep}<input title="Редактировать" align="right" width="20px" type="image" onClick={deleteDep} src="http://aux.iconpedia.net/uploads/264210985477521004.png" alt="" /></td>
+        <td>{isSalary}<input title="Редактировать" align="right" width="20px" type="image" onClick={deleteSalary} src="http://aux.iconpedia.net/uploads/264210985477521004.png" alt="" /></td>
         <td>{this.props.addEmployee.ndfl}</td>
-        <td className="right"><input type="image" onClick={fireHandler} src="http://aux.iconpedia.net/uploads/14037210881909376695.png" /></td>
+        <td className="right"><input type="image" title="Удалить" onClick={fireHandler} src="http://aux.iconpedia.net/uploads/14037210881909376695.png" alt="" /></td>
       </tr>
     );
   }
@@ -244,24 +243,23 @@ constructor() {
   render() {
     var total = this.state.employees.reduce((prev, next) => prev + next.ndfl,0);
     return (
-      <table>
-        <thead>
-          <tr>
-            <th>№</th>
-      <th>ФИО</th>
-      <th>Отдел</th>
-      <th>З/П</th>
-      <th>НДФЛ</th>
-      <th></th>
-          </tr>
-        </thead>
-        <tbody>
-            {this.state.employees.map((dynamicComponent) => <SalaryRow 
-            key = {this.state.employees.id} addEmployee = {dynamicComponent} salary={this.updateSalary} id={this.updateID} name={this.updateName} dep={this.updateDep} delID={this.deleteID} delName={this.deleteName} delDep={this.deleteDep} delSalary={this.deleteSalary} fire={this.fireEmployee} />)}
-            <tr><td colspan="6" className="bottom">Сумма НДФЛ: {total}</td></tr>
-            <tr><td colspan="6" className="bottom"><Button bsStyle="success" onClick={this.addNewRow}>Добавить</Button></td></tr>
-        </tbody>
-      </table>
+        <table>
+          <thead>
+            <tr>
+              <th>№</th>
+        <th>ФИО</th>
+        <th>Отдел</th>
+        <th>З/П</th>
+        <th>НДФЛ</th>
+        <th></th>
+            </tr>
+          </thead>
+          <tbody>
+              {this.state.employees.map((dynamicComponent) => <SalaryRow 
+              key = {this.state.employees.id} addEmployee = {dynamicComponent} salary={this.updateSalary} id={this.updateID} name={this.updateName} dep={this.updateDep} delID={this.deleteID} delName={this.deleteName} delDep={this.deleteDep} delSalary={this.deleteSalary} fire={this.fireEmployee} />)}
+              <tr><td colspan="6" className="bottom">Сумма НДФЛ: {total} <input type="image" className="add" title="Добавить" src="http://aux.iconpedia.net/uploads/17194693261258811327.png" alt="" onClick={this.addNewRow} /></td></tr>
+          </tbody>
+        </table>
     );
   }
 }
